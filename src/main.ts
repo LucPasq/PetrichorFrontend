@@ -7,12 +7,14 @@ import { AppComponent } from './app/app.component';
 
 // Import required icons
 import { addIcons } from 'ionicons';
-import { home, time, refreshOutline } from 'ionicons/icons';
+import { home, time, timeOutline, cloudOutline, refreshOutline } from 'ionicons/icons';
 
 // Register the icons
 addIcons({
   home,
   time,
+  'time-outline': timeOutline,
+  'cloud-outline': cloudOutline,
   'refresh-outline': refreshOutline,
 });
 
