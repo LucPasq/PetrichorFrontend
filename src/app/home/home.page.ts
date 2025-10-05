@@ -4,7 +4,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { IonicModule, ToastController, LoadingController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { firstValueFrom, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, timeout } from 'rxjs/operators';
 
 @Component({
   standalone: true,
@@ -25,6 +25,13 @@ export class HomePage implements OnDestroy {
   progress = 0;
   finalResult: string = '';
   result: string = '';
+  
+  // HTTP timeout configurations
+  private readonly GEOCODING_TIMEOUT = 15000; // 15 seconds for geocoding
+  private readonly RAINFALL_REQUEST_TIMEOUT = 120000; // 2 minutes for rainfall prediction
+  private readonly PROGRESS_POLL_TIMEOUT = 10000; // 10 seconds per progress poll
+  private readonly MAX_POLLING_TIME = 180000; // 3 minutes total polling time
+  private readonly POLL_INTERVAL = 1500; // 1.5 seconds between polls
 
   constructor() {
     this.rainForm = this.fb.group({
@@ -56,11 +63,14 @@ export class HomePage implements OnDestroy {
 
     const form = this.rainForm.value;
     try {
-      // Add timeout for mobile networks
+      // Geocoding with timeout for mobile networks
       const geoData: any = await firstValueFrom(
         this.http.get(
           `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(form.location)}&limit=1`
-        ).pipe(takeUntil(this.destroy$))
+        ).pipe(
+          timeout(this.GEOCODING_TIMEOUT),
+          takeUntil(this.destroy$)
+        )
       );
       
       if (!geoData || geoData.length === 0) {
@@ -79,24 +89,41 @@ export class HomePage implements OnDestroy {
           lat,
           lon,
           location_name: display_name.split(',')[0]
-        }).pipe(takeUntil(this.destroy$))
+        }).pipe(
+          timeout(this.RAINFALL_REQUEST_TIMEOUT), // 2 minutes timeout
+          takeUntil(this.destroy$)
+        )
       );
 
       const task_id = resp.task_id;
 
-      // Poll for progress with mobile-optimized intervals
+      // Enhanced polling with proper timeout and error handling
       let finished = false;
-      let attempts = 0;
-      const maxAttempts = 60; // 30 seconds max
+      const startTime = Date.now();
+      let pollAttempts = 0;
+      const maxPollAttempts = Math.ceil(this.MAX_POLLING_TIME / this.POLL_INTERVAL); // ~120 attempts over 3 minutes
       
-      while (!finished && attempts < maxAttempts) {
+      while (!finished && pollAttempts < maxPollAttempts) {
         try {
+          const elapsedTime = Date.now() - startTime;
+          if (elapsedTime > this.MAX_POLLING_TIME) {
+            throw new Error('Processing is taking longer than expected. Please try again.');
+          }
+          
           const progressResp: any = await firstValueFrom(
             this.http.get(`http://localhost:5000/progress/${task_id}`)
-              .pipe(takeUntil(this.destroy$))
+              .pipe(
+                timeout(this.PROGRESS_POLL_TIMEOUT),
+                takeUntil(this.destroy$)
+              )
           );
           
-          this.progress = Math.round((progressResp.progress / progressResp.total) * 100);
+          // Update progress based on response structure
+          if (progressResp.total && progressResp.progress !== undefined) {
+            this.progress = Math.round((progressResp.progress / progressResp.total) * 100);
+          } else if (progressResp.progress !== undefined) {
+            this.progress = Math.round(progressResp.progress);
+          }
           
           if (progressResp.status === 'done') {
             finished = true;
@@ -116,24 +143,42 @@ export class HomePage implements OnDestroy {
             
             this.finalResult =
               `The predicted rainfall on <b>${prettyDate}</b> at <b>${locDisplay}</b> is <b>${data.average_rainfall_mm} mm</b>, which means it will probably be <b>${weatherWord}</b>.`;
-            this.result =
-              `<b>Mean rainfall (past 10 years):</b> ${data.average_rainfall_mm} mm<br>
-               <b>Category:</b> ${data.category}`;
+            this.result = `
+              <div class="rainfall-item">
+                <div class="rainfall-label">Mean rainfall (past 10 years)</div>
+                <div class="rainfall-value">${data.average_rainfall_mm} mm</div>
+              </div>
+              <div class="category-item">
+                <div class="category-label">Category</div>
+                <div class="category-value category-${data.category.toLowerCase()}">${data.category}</div>
+              </div>
+            `;
           } else if (progressResp.status === 'error') {
             throw new Error(progressResp.message || 'Prediction failed');
           } else {
-            await this.sleep(500); // Slightly longer delay for mobile
-            attempts++;
+            // Continue polling - status is 'running' or similar
+            await this.sleep(this.POLL_INTERVAL);
+            pollAttempts++;
           }
-        } catch (pollError) {
-          console.warn('Polling error:', pollError);
-          attempts++;
-          await this.sleep(1000);
+        } catch (pollError: any) {
+          console.warn(`Polling attempt ${pollAttempts + 1} failed:`, pollError);
+          pollAttempts++;
+          
+          // If it's a timeout error on progress endpoint, continue polling
+          if (pollError.name === 'TimeoutError' && pollAttempts < maxPollAttempts) {
+            await this.sleep(this.POLL_INTERVAL);
+            continue;
+          }
+          
+          // For other errors, wait a bit longer before retry
+          if (pollAttempts < maxPollAttempts) {
+            await this.sleep(Math.min(this.POLL_INTERVAL * 2, 5000));
+          }
         }
       }
       
-      if (attempts >= maxAttempts) {
-        throw new Error('Request timeout. Please try again.');
+      if (pollAttempts >= maxPollAttempts && !finished) {
+        throw new Error('Processing is taking longer than expected. The server may still be working on your request. Please try again in a few minutes.');
       }
       
     } catch (err: any) {
@@ -144,10 +189,14 @@ export class HomePage implements OnDestroy {
       let errorMessage = 'An error occurred. Please try again.';
       if (err.message.includes('Location not found')) {
         errorMessage = 'Could not find that location. Try a different city or town.';
-      } else if (err.message.includes('timeout')) {
-        errorMessage = 'Request timed out. Please check your connection and try again.';
+      } else if (err.message.includes('timeout') || err.message.includes('longer than expected')) {
+        errorMessage = 'The request is taking longer than usual. Please check your connection and try again.';
+      } else if (err.name === 'TimeoutError') {
+        errorMessage = 'Request timed out. The server may be busy processing rainfall data. Please try again.';
       } else if (err.status === 0) {
         errorMessage = 'Unable to connect to server. Please check your internet connection.';
+      } else if (err.message.includes('few minutes')) {
+        errorMessage = err.message; // Use the specific message about waiting
       }
       
       this.result = errorMessage;

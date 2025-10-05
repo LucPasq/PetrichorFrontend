@@ -52,8 +52,12 @@
       <ion-card-content [innerHTML]="finalResult"></ion-card-content>
     </ion-card>
     
-    <div id="result" *ngIf="result">
-      <div [innerHTML]="result"></div>
+    <div class="rainfall-details" *ngIf="result">
+      <div class="details-header">
+        <ion-icon name="cloud-outline" class="details-icon"></ion-icon>
+        <span class="details-title">Rainfall Data</span>
+      </div>
+      <div [innerHTML]="result" class="details-content"></div>
     </div>
   </div>
 </ion-content>
