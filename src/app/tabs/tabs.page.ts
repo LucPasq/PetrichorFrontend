@@ -8,6 +8,4 @@ import { IonicModule } from '@ionic/angular';
   styleUrls: ['./tabs.page.scss'],
   imports: [IonicModule],
 })
-export class TabsPage {
-  constructor() {}
-}
+export class TabsPage {}

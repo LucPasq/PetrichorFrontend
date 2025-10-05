@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
@@ -11,9 +11,8 @@ import { CommonModule } from '@angular/common';
   imports: [IonicModule, HttpClientModule, CommonModule],
 })
 export class HistoryPage implements OnInit {
+  private http = inject(HttpClient);
   resultsHistory: any[] = [];
-
-  constructor(private http: HttpClient) {}
 
   ngOnInit() {
     this.loadResultsHistory();

@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -12,13 +13,16 @@ import { CommonModule } from '@angular/common';
   imports: [IonicModule, ReactiveFormsModule, HttpClientModule, CommonModule],
 })
 export class HomePage {
+  private fb = inject(FormBuilder);
+  private http = inject(HttpClient);
+  
   rainForm: FormGroup;
   loading = false;
   progress = 0;
   finalResult: string = '';
   result: string = '';
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor() {
     this.rainForm = this.fb.group({
       date: ['', Validators.required],
       location: ['', Validators.required]
@@ -34,28 +38,28 @@ export class HomePage {
 
     const form = this.rainForm.value;
     try {
-      const geoData: any = await this.http.get(
+      const geoData: any = await firstValueFrom(this.http.get(
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(form.location)}`
-      ).toPromise();
+      ));
       if (!geoData || geoData.length === 0) throw new Error('Location not found!');
       const lat = geoData[0].lat;
       const lon = geoData[0].lon;
       const display_name = geoData[0].display_name;
 
       this.result = 'Loading rainfall prediction...';
-      const resp: any = await this.http.post('http://localhost:5000/rainfall-summary', {
+      const resp: any = await firstValueFrom(this.http.post('http://localhost:5000/rainfall-summary', {
         date: form.date,
         lat,
         lon,
         location_name: display_name.split(',')[0]
-      }).toPromise();
+      }));
 
       const task_id = resp.task_id;
 
       // Poll for progress
       let finished = false;
       while (!finished) {
-        const progressResp: any = await this.http.get(`http://localhost:5000/progress/${task_id}`).toPromise();
+        const progressResp: any = await firstValueFrom(this.http.get(`http://localhost:5000/progress/${task_id}`));
         this.progress = Math.round((progressResp.progress / progressResp.total) * 100);
         if (progressResp.status === 'done') {
           finished = true;
