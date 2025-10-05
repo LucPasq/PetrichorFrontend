@@ -9,24 +9,50 @@
     <div class="logo">Petrichor</div>
     <div class="subtitle">Predict rainfall for any location and date</div>
     <form [formGroup]="rainForm" (ngSubmit)="onSubmit()">
-      <ion-item>
+      <ion-item lines="none">
         <ion-label position="stacked">Date</ion-label>
-        <ion-input type="date" formControlName="date" required></ion-input>
+        <ion-input 
+          type="date" 
+          formControlName="date" 
+          required 
+          clear-input="true"
+          aria-label="Select prediction date">
+        </ion-input>
       </ion-item>
-      <ion-item>
+      <ion-item lines="none">
         <ion-label position="stacked">Town or City Name</ion-label>
-        <ion-input type="text" formControlName="location" placeholder="e.g. Toronto" required></ion-input>
+        <ion-input 
+          type="text" 
+          formControlName="location" 
+          placeholder="e.g. Toronto" 
+          required 
+          clear-input="true"
+          autocomplete="address-level2"
+          aria-label="Enter location name">
+        </ion-input>
       </ion-item>
-      <ion-button expand="block" type="submit" [disabled]="rainForm.invalid || loading">Show Rainfall Prediction</ion-button>
+      <ion-button 
+        expand="block" 
+        type="submit" 
+        [disabled]="rainForm.invalid || loading"
+        size="default"
+        strong="true">
+        <ion-icon name="cloud-outline" slot="start" *ngIf="!loading"></ion-icon>
+        <ion-spinner name="circular" slot="start" *ngIf="loading"></ion-spinner>
+        {{ loading ? 'Processing...' : 'Show Rainfall Prediction' }}
+      </ion-button>
     </form>
-    <div *ngIf="loading" style="width:100%;margin:20px 0;">
+    
+    <div *ngIf="loading" class="progress-container">
       <ion-progress-bar [value]="progress/100" color="primary"></ion-progress-bar>
-      <div style="text-align:right;color:#1769aa;font-weight:600;margin-top:4px;">{{progress}}%</div>
+      <div class="progress-text">{{progress}}%</div>
     </div>
-    <ion-card *ngIf="finalResult" color="primary" style="margin:22px 0 10px 0;">
+    
+    <ion-card *ngIf="finalResult" color="primary">
       <ion-card-content [innerHTML]="finalResult"></ion-card-content>
     </ion-card>
-    <div id="result" *ngIf="result" style="margin:8px 0 8px 0; font-size:1rem; background:#e3f2fd; border-radius:5px; padding:7px 12px;">
+    
+    <div id="result" *ngIf="result">
       <div [innerHTML]="result"></div>
     </div>
   </div>

@@ -1,30 +1,138 @@
 .container {
   max-width: 600px;
   margin: 0 auto;
+  padding: 8px;
 }
 
 ion-list {
   background: transparent;
+  padding: 0;
 }
 
 ion-item {
   --background: #f8f9fa;
-  --border-radius: 8px;
-  margin-bottom: 10px;
-  border-radius: 8px;
+  --border-radius: 12px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  --min-height: auto;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --inner-padding-end: 0;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 h2 {
   font-weight: 300;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
+  padding: 0 8px;
+  
+  @media (max-width: 480px) {
+    font-size: 1.3rem;
+    margin-bottom: 16px;
+  }
 }
 
-ion-label h3 {
-  color: #1769aa;
-  margin-bottom: 4px;
+ion-label {
+  margin: 12px 0;
+  
+  h3 {
+    color: #1769aa;
+    margin-bottom: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    
+    @media (max-width: 480px) {
+      font-size: 0.95rem;
+    }
+  }
+  
+  p {
+    margin: 4px 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    
+    @media (max-width: 480px) {
+      font-size: 0.85rem;
+    }
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 }
 
-ion-label p {
-  margin: 2px 0;
-  font-size: 0.9rem;
+/* Empty state styling */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  
+  ion-label {
+    color: #888;
+    
+    h3 {
+      color: #666;
+      margin-bottom: 8px;
+    }
+    
+    p {
+      color: #888;
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    padding: 30px 16px;
+    
+    ion-label {
+      h3 {
+        font-size: 1rem;
+      }
+      
+      p {
+        font-size: 0.85rem;
+      }
+    }
+  }
+}
+
+/* Refresh button optimization */
+ion-button {
+  margin-top: 16px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  
+  @media (max-width: 480px) {
+    margin-top: 12px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding: 4px;
+  }
+  
+  ion-item {
+    --border-radius: 10px;
+    margin-bottom: 10px;
+    --padding-start: 12px;
+    --padding-end: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 2px;
+  }
+  
+  ion-item {
+    --border-radius: 8px;
+    margin-bottom: 8px;
+    --padding-start: 10px;
+    --padding-end: 10px;
+  }
 }

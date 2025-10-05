@@ -1,13 +1,50 @@
 ion-tab-bar {
   --color: #888;
   --color-selected: #1769aa;
+  --border: none;
+  border-top: 1px solid rgba(23, 105, 170, 0.1);
 }
 
 ion-tab-button {
   --color: #888;
   --color-selected: #1769aa;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  
+  ion-icon {
+    font-size: 1.4rem;
+  }
+  
+  ion-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-top: 4px;
+  }
 }
 
 ion-tab-button.tab-selected {
   --color: #1769aa;
+}
+
+/* Safe area support for devices with home indicator */
+@supports (padding: env(safe-area-inset-bottom)) {
+  ion-tab-bar {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Better touch targets for mobile */
+@media (max-width: 480px) {
+  ion-tab-button {
+    --padding-top: 6px;
+    --padding-bottom: 6px;
+    
+    ion-icon {
+      font-size: 1.3rem;
+    }
+    
+    ion-label {
+      font-size: 0.75rem;
+    }
+  }
 }
