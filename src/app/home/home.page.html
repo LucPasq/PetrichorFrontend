@@ -29,20 +29,5 @@
     <div id="result" *ngIf="result" style="margin:8px 0 8px 0; font-size:1rem; background:#e3f2fd; border-radius:5px; padding:7px 12px;">
       <div [innerHTML]="result"></div>
     </div>
-    <div id="historyWrapper" style="width:100%;margin-top:28px;">
-      <h3 style="color:#1769aa;font-size:1.15rem;margin-bottom:10px;">Last 10 Results</h3>
-      <ion-list>
-        <ion-item *ngFor="let item of resultsHistory">
-          <ion-label>
-            <b>{{item.date}}</b> at <b>{{item.location?.name || 'lat: ' + item.location?.lat + ', lon: ' + item.location?.lon}}</b>:
-            <span style="color:#1769aa;">{{item.average_rainfall_mm}} mm</span> —
-            <span style="color:#1976d2;">{{item.category}}</span>
-          </ion-label>
-        </ion-item>
-        <ion-item *ngIf="resultsHistory.length===0">
-          <ion-label style="color:#888;">No recent results.</ion-label>
-        </ion-item>
-      </ion-list>
-    </div>
   </div>
 </ion-content>

@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Prediction History</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="container">
+    <h2 style="color:#1769aa;text-align:center;margin-bottom:20px;">Recent Predictions</h2>
+    <ion-list>
+      <ion-item *ngFor="let item of resultsHistory">
+        <ion-label>
+          <h3><b>{{item.date}}</b></h3>
+          <p><b>{{item.location?.name || 'lat: ' + item.location?.lat + ', lon: ' + item.location?.lon}}</b></p>
+          <p>Rainfall: <span style="color:#1769aa;font-weight:bold;">{{item.average_rainfall_mm}} mm</span></p>
+          <p>Category: <span style="color:#1976d2;font-weight:bold;">{{item.category}}</span></p>
+        </ion-label>
+      </ion-item>
+      <ion-item *ngIf="resultsHistory.length===0">
+        <ion-label style="color:#888;text-align:center;">
+          <h3>No predictions yet</h3>
+          <p>Make your first rainfall prediction on the Home tab!</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+    
+    <ion-button 
+      *ngIf="resultsHistory.length > 0" 
+      expand="block" 
+      fill="outline" 
+      color="primary" 
+      (click)="refreshHistory()"
+      style="margin-top: 20px;">
+      <ion-icon name="refresh-outline" slot="start"></ion-icon>
+      Refresh History
+    </ion-button>
+  </div>
+</ion-content>

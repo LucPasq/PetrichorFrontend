@@ -1,0 +1,30 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+ion-list {
+  background: transparent;
+}
+
+ion-item {
+  --background: #f8f9fa;
+  --border-radius: 8px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
+
+h2 {
+  font-weight: 300;
+  margin-bottom: 24px;
+}
+
+ion-label h3 {
+  color: #1769aa;
+  margin-bottom: 4px;
+}
+
+ion-label p {
+  margin: 2px 0;
+  font-size: 0.9rem;
+}

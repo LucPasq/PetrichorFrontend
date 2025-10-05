@@ -17,22 +17,11 @@ export class HomePage {
   progress = 0;
   finalResult: string = '';
   result: string = '';
-  resultsHistory: any[] = [];
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.rainForm = this.fb.group({
       date: ['', Validators.required],
       location: ['', Validators.required]
-    });
-  }
-
-  ngOnInit() {
-    this.loadResultsHistory();
-  }
-
-  async loadResultsHistory() {
-    this.http.get<any[]>('http://localhost:5000/results-history').subscribe(data => {
-      this.resultsHistory = data || [];
     });
   }
 
@@ -87,7 +76,6 @@ export class HomePage {
           this.result =
             `<b>Mean rainfall (past 10 years):</b> ${data.average_rainfall_mm} mm<br>
              <b>Category:</b> ${data.category}`;
-          this.loadResultsHistory();
         } else {
           await this.sleep(350);
         }
