@@ -14,21 +14,23 @@
 .logo {
   font-size: 2.2rem;
   font-weight: 800;
-  color: #1769aa;
+  color: #0a3d91;
   letter-spacing: 1.5px;
   margin-bottom: 8px;
   text-align: center;
   font-family: 'Segoe UI', Arial, sans-serif;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .subtitle {
   font-size: 1.1rem;
-  color: #1976d2;
+  color: #0d47a1;
   margin-bottom: 24px;
   text-align: center;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.5px;
   line-height: 1.4;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 
 /* Mobile-first responsive design */
@@ -81,6 +83,22 @@ form {
     &:last-of-type {
       margin-bottom: 20px;
     }
+    
+    /* Ensure input text is white */
+    ion-input {
+      --color: #ffffff;
+      --placeholder-color: rgba(255, 255, 255, 0.7);
+      
+      input {
+        color: #ffffff !important;
+      }
+    }
+    
+    /* Ensure labels remain dark */
+    ion-label {
+      color: #ffffff !important;
+      font-weight: 500;
+    }
   }
   
   ion-button {
@@ -100,21 +118,32 @@ form {
   
   .progress-text {
     text-align: right;
-    color: #1769aa;
-    font-weight: 600;
-    margin-top: 4px;
-    font-size: 0.9rem;
+    color: #0d47a1;
+    font-weight: 700;
+    margin-top: 6px;
+    font-size: 0.95rem;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 4px 8px;
+    border-radius: 12px;
+    display: inline-block;
+    border: 1px solid rgba(13, 71, 161, 0.2);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
 }
 
 /* Result cards mobile optimization */
 ion-card {
   margin: 16px 0 8px 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   
   ion-card-content {
     padding: 16px;
     font-size: 0.95rem;
-    line-height: 1.5;
+    line-height: 1.6;
+    color: #ffffff;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -126,32 +155,48 @@ ion-card {
   padding: 0;
   box-shadow: 0 2px 8px rgba(23, 105, 170, 0.1);
   border: 1px solid rgba(23, 105, 170, 0.15);
+  
+  /* Ensure all text within rainfall-details is dark */
+  color: #2c2c2c;
+  
+  * {
+    color: #2c2c2c;
+  }
 }
 
 .details-header {
   display: flex;
   align-items: center;
   padding: 16px 16px 12px 16px;
-  border-bottom: 1px solid rgba(23, 105, 170, 0.1);
-  background: rgba(23, 105, 170, 0.05);
+  border-bottom: 1px solid rgba(23, 105, 170, 0.2);
+  background: rgba(23, 105, 170, 0.08);
   border-radius: 12px 12px 0 0;
   
   .details-icon {
     font-size: 1.3rem;
-    color: #1769aa;
+    color: #0d47a1;
     margin-right: 8px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
   
   .details-title {
     font-size: 1.1rem;
-    font-weight: 600;
-    color: #1769aa;
+    font-weight: 700;
+    color: #0d47a1;
     letter-spacing: 0.3px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
 }
 
 .details-content {
   padding: 16px;
+  color: #2c2c2c;
+  font-weight: 500;
+  
+  /* Ensure all child text elements are dark */
+  p, span, div {
+    color: #2c2c2c;
+  }
 }
 
 .rainfall-item, .category-item {
@@ -167,20 +212,23 @@ ion-card {
 
 .rainfall-label, .category-label {
   font-size: 0.95rem;
-  color: #333;
-  font-weight: 500;
+  color: #2c2c2c;
+  font-weight: 700;
   flex: 1;
 }
 
 .rainfall-value {
   font-size: 1.1rem;
-  font-weight: 700;
-  color: #1769aa;
-  background: rgba(23, 105, 170, 0.1);
-  padding: 6px 12px;
+  font-weight: 800;
+  color: #ffffff;
+  background: linear-gradient(135deg, #0d47a1, #1565c0);
+  padding: 8px 14px;
   border-radius: 20px;
   min-width: 80px;
   text-align: center;
+  border: 1px solid rgba(13, 71, 161, 0.3);
+  box-shadow: 0 2px 6px rgba(13, 71, 161, 0.4);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .category-value {
@@ -258,13 +306,96 @@ ion-card {
 #result {
   margin: 8px 0;
   font-size: 0.95rem;
-  background: #e3f2fd;
+  background: linear-gradient(135deg, #f8fbff 0%, #e3f2fd 100%);
   border-radius: 8px;
-  padding: 12px;
-  line-height: 1.5;
+  padding: 14px;
+  line-height: 1.6;
+  color: #2c2c2c;
+  font-weight: 600;
+  border: 1px solid rgba(23, 105, 170, 0.2);
+  box-shadow: 0 2px 6px rgba(23, 105, 170, 0.1);
+  
+  /* Ensure all child elements are dark */
+  * {
+    color: #2c2c2c;
+  }
   
   @media (max-width: 480px) {
-    font-size: 0.9rem;
-    padding: 10px;
+    font-size: 0.92rem;
+    padding: 12px;
+    font-weight: 700;
+  }
+}
+
+/* Mobile optimizations for progress text */
+@media (max-width: 480px) {
+  .progress-container {
+    .progress-text {
+      font-size: 1rem;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 6px 10px;
+      border: 1.5px solid rgba(13, 71, 161, 0.3);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+  }
+  
+  /* Enhanced mobile optimizations for all result elements */
+  ion-card {
+    ion-card-content {
+      font-size: 0.92rem;
+      font-weight: 700;
+      padding: 18px;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    }
+  }
+  
+  .details-header {
+    .details-icon {
+      font-size: 1.4rem;
+      color: #0a3d91;
+    }
+    
+    .details-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #0a3d91;
+    }
+  }
+  
+  .rainfall-label, .category-label {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #0d0d0d;
+  }
+  
+  .rainfall-value {
+    font-size: 1.05rem;
+    font-weight: 900;
+    padding: 10px 16px;
+    box-shadow: 0 3px 8px rgba(13, 71, 161, 0.5);
+    border: 1.5px solid rgba(13, 71, 161, 0.4);
+  }
+  
+  .category-value {
+    font-size: 0.98rem;
+    font-weight: 700;
+    padding: 8px 18px;
+    
+    &.category-low {
+      box-shadow: 0 3px 8px rgba(76, 175, 80, 0.4);
+    }
+    
+    &.category-moderate {
+      box-shadow: 0 3px 8px rgba(255, 152, 0, 0.4);
+    }
+    
+    &.category-high {
+      box-shadow: 0 3px 8px rgba(244, 67, 54, 0.4);
+    }
+    
+    &.category-very {
+      box-shadow: 0 3px 8px rgba(156, 39, 176, 0.4);
+    }
   }
 }

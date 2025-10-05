@@ -47,7 +47,18 @@ ion-tab-button {
 }
 
 ion-tab-button.tab-selected {
-  --color: #1769aa;
+  --color: #0a3d91;
+  --color-selected: #0a3d91;
+}
+
+ion-tab-button {
+  --color: #1a1a1a;
+  color: #1a1a1a;
+  
+  ion-label {
+    color: #1a1a1a !important;
+    font-weight: 600;
+  }
 }
 
 /* Safe area support for devices with home indicator */

@@ -25,13 +25,16 @@ ion-item {
 }
 
 h2 {
-  font-weight: 300;
+  font-weight: 600;
   margin-bottom: 20px;
   padding: 0 8px;
+  color: #ffffff;
   
   @media (max-width: 480px) {
     font-size: 1.3rem;
     margin-bottom: 16px;
+    color: #ffffff;
+    font-weight: 700;
   }
 }
 
@@ -39,10 +42,10 @@ ion-label {
   margin: 12px 0;
   
   h3 {
-    color: #1769aa;
+    color: #0d47a1;
     margin-bottom: 6px;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 700;
     
     @media (max-width: 480px) {
       font-size: 0.95rem;
@@ -53,9 +56,12 @@ ion-label {
     margin: 4px 0;
     font-size: 0.9rem;
     line-height: 1.4;
+    color: #1a1a1a;
+    font-weight: 500;
     
     @media (max-width: 480px) {
       font-size: 0.85rem;
+      font-weight: 600;
     }
     
     &:last-child {
@@ -70,16 +76,18 @@ ion-label {
   padding: 40px 20px;
   
   ion-label {
-    color: #555;
+    color: #1a1a1a;
     
     h3 {
-      color: #333;
+      color: #0d0d0d;
       margin-bottom: 8px;
+      font-weight: 700;
     }
     
     p {
-      color: #555;
+      color: #1a1a1a;
       font-size: 0.9rem;
+      font-weight: 500;
     }
   }
   
@@ -93,6 +101,7 @@ ion-label {
       
       p {
         font-size: 0.85rem;
+        font-weight: 600;
       }
     }
   }
@@ -107,6 +116,19 @@ ion-button {
   @media (max-width: 480px) {
     margin-top: 12px;
     font-size: 0.9rem;
+  }
+}
+
+/* Loading state styling */
+.loading-state {
+  text-align: center;
+  padding: 20px;
+  
+  .loading-text {
+    margin-top: 8px;
+    color: #2c2c2c;
+    font-weight: 600;
+    font-size: 0.95rem;
   }
 }
 

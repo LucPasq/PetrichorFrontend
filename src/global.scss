@@ -122,6 +122,21 @@ ion-tab-bar {
 ion-input, ion-textarea {
   --padding-start: 12px;
   --padding-end: 12px;
+  --color: #ffffff;
+  --placeholder-color: rgba(255, 255, 255, 0.7);
+  color: #ffffff !important;
+}
+
+/* Ensure form elements maintain proper colors */
+ion-input input, ion-textarea textarea {
+  color: #ffffff !important;
+}
+
+/* Input item styling */
+ion-item {
+  ion-label {
+    color: #1a1a1a;
+  }
 }
 
 /* Optimized spacing for mobile */
@@ -129,4 +144,14 @@ ion-input, ion-textarea {
   .ion-padding {
     --ion-padding: 12px;
   }
+}
+
+/* Input elements styling */
+ion-input, ion-textarea, ion-input *, ion-textarea * {
+  color: #ffffff !important;
+}
+
+/* Keep titles white on primary backgrounds */
+ion-title {
+  color: #ffffff !important;
 }

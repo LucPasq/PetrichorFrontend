@@ -9,9 +9,9 @@
     <h2>Recent Predictions</h2>
     
     <!-- Loading state -->
-    <div *ngIf="loading" style="text-align: center; padding: 20px;">
+    <div *ngIf="loading" class="loading-state">
       <ion-spinner name="circular" color="primary"></ion-spinner>
-      <p style="margin-top: 8px; color: #333;">Loading history...</p>
+      <p class="loading-text">Loading history...</p>
     </div>
     
     <ion-list *ngIf="!loading">
