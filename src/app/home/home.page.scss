@@ -1,27 +1,34 @@
-#container {
+.container {
+  max-width: 600px;
+  margin: 32px auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(23, 105, 170, 0.1);
+  padding: 28px 38px 38px 38px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.logo {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #1769aa;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
   text-align: center;
-
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  font-family: 'Segoe UI', Arial, sans-serif;
 }
-
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
+.subtitle {
+  font-size: 1.2rem;
+  color: #1976d2;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 500;
+  letter-spacing: 1px;
 }
-
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
+@media (max-width: 700px) {
+  .container {
+    max-width: 95vw;
+    padding: 12px;
+  }
 }

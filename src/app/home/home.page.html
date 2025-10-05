@@ -1,20 +1,48 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Petrichor</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+<ion-content class="ion-padding">
+  <div class="container">
+    <div class="logo">Petrichor</div>
+    <div class="subtitle">Predict rainfall for any location and date</div>
+    <form [formGroup]="rainForm" (ngSubmit)="onSubmit()">
+      <ion-item>
+        <ion-label position="stacked">Date</ion-label>
+        <ion-input type="date" formControlName="date" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Town or City Name</ion-label>
+        <ion-input type="text" formControlName="location" placeholder="e.g. Toronto" required></ion-input>
+      </ion-item>
+      <ion-button expand="block" type="submit" [disabled]="rainForm.invalid || loading">Show Rainfall Prediction</ion-button>
+    </form>
+    <div *ngIf="loading" style="width:100%;margin:20px 0;">
+      <ion-progress-bar [value]="progress/100" color="primary"></ion-progress-bar>
+      <div style="text-align:right;color:#1769aa;font-weight:600;margin-top:4px;">{{progress}}%</div>
+    </div>
+    <ion-card *ngIf="finalResult" color="primary" style="margin:22px 0 10px 0;">
+      <ion-card-content [innerHTML]="finalResult"></ion-card-content>
+    </ion-card>
+    <div id="result" *ngIf="result" style="margin:8px 0 8px 0; font-size:1rem; background:#e3f2fd; border-radius:5px; padding:7px 12px;">
+      <div [innerHTML]="result"></div>
+    </div>
+    <div id="historyWrapper" style="width:100%;margin-top:28px;">
+      <h3 style="color:#1769aa;font-size:1.15rem;margin-bottom:10px;">Last 10 Results</h3>
+      <ion-list>
+        <ion-item *ngFor="let item of resultsHistory">
+          <ion-label>
+            <b>{{item.date}}</b> at <b>{{item.location?.name || 'lat: ' + item.location?.lat + ', lon: ' + item.location?.lon}}</b>:
+            <span style="color:#1769aa;">{{item.average_rainfall_mm}} mm</span> —
+            <span style="color:#1976d2;">{{item.category}}</span>
+          </ion-label>
+        </ion-item>
+        <ion-item *ngIf="resultsHistory.length===0">
+          <ion-label style="color:#888;">No recent results.</ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
   </div>
 </ion-content>
